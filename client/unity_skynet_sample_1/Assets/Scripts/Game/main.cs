@@ -11,16 +11,18 @@ namespace gtmGame
     {
         private GameMgr m_gameMgr = new GameMgr();
 
-        public string ipaddress = "192.168.0.104";
+        public string ipaddress = "192.168.0.102";
 
-        private ulong msgid = 10000;
+        private ulong reqmsgid = 10000;
+
+        private ulong rspmsgid = 10001;
 
         // Start is called before the first frame update
         void Start()
         {
             m_gameMgr.DoInit();
 
-            IMsgDispatcher.instance.RegisterMsg(msgid, TestMsgProc);
+            IMsgDispatcher.instance.RegisterMsg(rspmsgid, TestMsgProc);
 
             NetManager.instance.SendConnect(ipaddress, 8888);
         }
@@ -33,7 +35,7 @@ namespace gtmGame
 
         private void OnDestroy()
         {
-            IMsgDispatcher.instance.UnRegisterMsg(msgid);
+            IMsgDispatcher.instance.UnRegisterMsg(rspmsgid);
 
             m_gameMgr.DoClose();
         }
@@ -48,8 +50,8 @@ namespace gtmGame
 
         private void SendTestMsg()
         {
-            byte[] bytearray = System.Text.Encoding.UTF8.GetBytes("unity_skynet_sample_1");
-            IMsgDispatcher.instance.SendMsg(msgid, bytearray);
+            byte[] bytearray = System.Text.Encoding.UTF8.GetBytes("unity_skynet_sample_1 你好");
+            IMsgDispatcher.instance.SendMsg(reqmsgid, bytearray);
         }
 
         private void TestMsgProc(byte[] bytearray)

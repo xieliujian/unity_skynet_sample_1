@@ -110,9 +110,16 @@ namespace gtmEngine.Net
         /// </summary>
         void OnConnect(IAsyncResult asr)
         {
-            m_NetStream = m_Client.GetStream();
-            m_NetStream.BeginRead(m_ByteBuffer, 0, MAX_READ, new AsyncCallback(OnRead), null);
-            LogSystem.instance.Log(LogCategory.GameEngine, "======连接========");
+            try
+            {
+                m_NetStream = m_Client.GetStream();
+                m_NetStream.BeginRead(m_ByteBuffer, 0, MAX_READ, new AsyncCallback(OnRead), null);
+                LogSystem.instance.Log(LogCategory.GameEngine, "======连接========");
+            }
+            catch(Exception e)
+            {
+                LogSystem.instance.LogError(LogCategory.GameEngine, e.Message);
+            }
         }
 
         /// <summary>
@@ -276,9 +283,7 @@ namespace gtmEngine.Net
         {
             if (m_Client != null)
             {
-                if (m_Client.Connected)
-                    m_Client.Close();
-
+                m_Client.Close();
                 m_Client = null;
 
                 LogSystem.instance.Log(LogCategory.GameEngine, "======关闭连接========");
