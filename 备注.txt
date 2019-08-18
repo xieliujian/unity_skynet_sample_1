@@ -1,0 +1,27 @@
+cd /Users/xieliujian/Desktop/xieliujian/unity_skynet_sample_1.git/trunk/server/skynet-1.2.0/
+
+make macosx
+
+./skynet myexample/config
+
+cservice
+luaclib
+myexample
+skynet.dSYM
+skynet
+
+svn revert cservice --depth infinity
+svn revert luaclib --depth infinity
+svn revert skynet.dSYM --depth infinity
+
+svn add --non-recursive cservice
+svn add --non-recursive luaclib
+
+cd /Users/xieliujian/Desktop/xieliujian/unity_skynet_sample_1.git/trunk/server/skynet-1.2.0/cservice/
+cd /Users/xieliujian/Desktop/xieliujian/unity_skynet_sample_1.git/trunk/server/skynet-1.2.0/luaclib/
+
+rm -rf /Users/xieliujian/Desktop/xieliujian/unity_skynet_sample_1.git/
+rm -rf /Users/xieliujian/Desktop/xieliujian/.idea/
+rm -rf /Users/xieliujian/Desktop/xieliujian/.svn/
+
+svn checkout https://github.com/xieliujian/unity_skynet_sample_1.git
