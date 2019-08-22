@@ -12,7 +12,13 @@ skynet.start(function()
     -- 启动函数里调用Skynet API开发各种服务
     print("======Server start=======")
 
-    skynet.newservice("socket2")
+    local gate = skynet.newservice("gate1")
+    skynet.call(gate, "lua", "open", {
+        address = "0.0.0.0", -- 监听地址 0.0.0.0
+        port = 8888,    -- 监听端口 8888
+        maxclient = 1024,   -- 最多允许 1024 个外部连接同时建立
+        nodelay = true,     -- 给外部连接设置  TCP_NODELAY 属性
+    })
 
     skynet.exit()
 end)
