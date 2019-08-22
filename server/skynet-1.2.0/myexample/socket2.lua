@@ -10,7 +10,7 @@ local socket = require "skynet.socket"
 local function echo(id)
     -- 每当 accept 函数获得一个新的 socket id 后，并不会立即收到这个 socket 上的数据。这是因为，我们有时会希望把这个 socket 的操作权转让给别的服务去处理。
     -- 任何一个服务只有在调用 socket.start(id) 之后，才可以收到这个 socket 上的数据。
-    socket.start(id)
+    --socket.start(id)
 
     while true do
         local str = socket.read(id)
@@ -24,7 +24,7 @@ local function echo(id)
 
             print(""..reqmsglen);
             print(""..reqmsgid);
-            print(reqstr);
+            --print(reqstr);
 
             --- rspmsg
             local rspstr = "Say(说) : "..reqstr;
@@ -33,6 +33,8 @@ local function echo(id)
 
             local str = string.pack("<HL", rspmsglen, rspmsgid);
             str = str..rspstr;
+
+            print("11111111111111111111111111111111111111111111111")
 
             -- 把一个字符串置入正常的写队列，skynet 框架会在 socket 可写时发送它。
             socket.write(id, str)
