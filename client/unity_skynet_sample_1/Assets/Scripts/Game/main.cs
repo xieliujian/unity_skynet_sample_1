@@ -23,8 +23,6 @@ namespace gtmGame
             m_gameMgr.DoInit();
 
             IMsgDispatcher.instance.RegisterMsg(rspmsgid, TestMsgProc);
-
-            NetManager.instance.SendConnect(ipaddress, 8888);
         }
 
         // Update is called once per frame
@@ -42,15 +40,28 @@ namespace gtmGame
 
         private void OnGUI()
         {
-            if (GUI.Button(new Rect(0, 0, 300, 200), "SendTestMsg"))
+            if (GUI.Button(new Rect(0, 0, 300, 100), "SendConnect"))
+            {
+                SendConnect();
+            }
+
+            if (GUI.Button(new Rect(0, 100, 300, 100), "SendTestMsg"))
             {
                 SendTestMsg();
             }
         }
 
+        private void SendConnect()
+        {
+            INetManager.instance.SendConnect(ipaddress, 8888);
+        }
+
         private void SendTestMsg()
         {
-            byte[] bytearray = System.Text.Encoding.UTF8.GetBytes("unity_skynet_sample_1 你好");
+            byte[] bytearray = System.Text.Encoding.UTF8.GetBytes(
+                "白日依山尽，黄河入海流。欲穷千里目，更上一层楼。" +
+                "红豆生南国，春来发几枝。愿君多采撷，此物最相思。" +
+                "松下问童子，言师采药去。只在此山中，云深不知处。");
             IMsgDispatcher.instance.SendMsg(reqmsgid, bytearray);
         }
 

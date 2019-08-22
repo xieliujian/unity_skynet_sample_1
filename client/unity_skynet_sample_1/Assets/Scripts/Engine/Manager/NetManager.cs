@@ -57,6 +57,7 @@ namespace gtmEngine
         /// </summary>
         public override void SendConnect(string address, int port)
         {
+            m_SocketClient.Close();
             m_SocketClient.SendConnect(address, port);
         }
 
