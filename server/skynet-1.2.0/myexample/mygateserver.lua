@@ -9,28 +9,26 @@ local gateserver = require "snax.gateserver"
 local netpack = require "skynet.netpack"
 
 local handler = {}
-local agents = {}
 local CMD = {}
-
+local agents = {}
 --注册client消息专门用来将接收到的网络数据转发给agent,不需要解包，也不需要打包
 skynet.register_protocol {
     name = "client",
     id = skynet.PTYPE_CLIENT,
 }
 
---当一个客户端链接进来，gateserver自动处理链接，并且调用该函数，必须要有
 function handler.connect(fd, ipaddr)
-    skynet.error("ipaddr:", ipaddr, "fd:", fd, "connect")
-    gateserver.openclient(fd) --链接成功不代表马上可以读到数据，需要打开这个套接字，允许fd接收数据
 
-    local agent = skynet.newservice("myagent", fd) --连接成功就启动一个agent来代理
+    skynet.error("ipaddr:", ipaddr, "fd:", fd, "connect")
+    gateserver.openclient(fd)
+    local agent = skynet.newservice("myagent", fd)
+    --连接成功就启动一个agent来代理
     agents[fd] = agent
 end
 
---当一个客户端断开链接后调用该函数，必须要有
 function handler.disconnect(fd)
+    --断开连接后，agent服务退出
     skynet.error("fd:", fd, "disconnect")
-
     local agent = agents[fd]
     if (agent) then
         --通过发送消息的方式来退出不要使用skynet.kill(agent)
@@ -39,24 +37,21 @@ function handler.disconnect(fd)
     end
 end
 
---当fd有数据到达了，会调用这个函数，前提是fd需要调用gateserver.openclient打开
 function handler.message(fd, msg, sz)
+    local unpackmsg = netpack.tostring(msg, sz);
+
     local agent = agents[fd]
-    skynet.redirect(agent, 0, "client", 0, msg, sz) --收到消息就转发给agent
+    skynet.redirect(agent, 0, "client", 0, unpackmsg, sz) --收到消息就转发给agent
 end
 
---如果报错就关闭该套接字
 function handler.error(fd, msg)
-    gateserver.closeclient(fd)
+    skynet.closeclient(fd)
 end
 
---fd中待发送数据超过1M时调用该函数，可以不处理
 function handler.warning(fd, size)
-    skynet.skynet("warning fd=", fd, "unsent data over 1M")
+    skynet.skynet("warning fd=", fd, "unsend data over 1M")
 end
 
---一旦gateserver打开监听成功后就会调用该接口
---testmygateserver.lua通过给mygateserver.lua发送lua消息open触发该函数调用
 function handler.open(source, conf)
     skynet.error("open by ", skynet.address(source))
     skynet.error("listen on", conf.port)
@@ -73,6 +68,5 @@ function handler.command(cmd, source, ...)
     local f = assert(CMD[cmd])
     return f(source, ...)
 end
-
 
 gateserver.start(handler)

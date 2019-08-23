@@ -13,7 +13,7 @@ skynet.register_protocol {
     unpack = netpack.tostring,
 }
 
-local function task(msg, sz)
+local function task(msg)
     print("recv from fd", client_fd, msg)
 
     local reqmsgid = string.unpack("<L", msg);
@@ -38,8 +38,8 @@ end
 
 skynet.start(function()
     --注册client消息专门用来接收网络数据
-    skynet.dispatch("client", function(_, _, msg, sz)
-        task(msg, sz)
+    skynet.dispatch("client", function(_, _, msg)
+        task(msg)
     end)
 
     skynet.dispatch("lua", function(_, _, cmd)
