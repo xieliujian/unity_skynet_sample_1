@@ -38,10 +38,8 @@ function handler.disconnect(fd)
 end
 
 function handler.message(fd, msg, sz)
-    local unpackmsg = netpack.tostring(msg, sz);
-
     local agent = agents[fd]
-    skynet.redirect(agent, 0, "client", 0, unpackmsg, sz) --收到消息就转发给agent
+    skynet.redirect(agent, 0, "client", 0, msg, sz) --收到消息就转发给agent
 end
 
 function handler.error(fd, msg)

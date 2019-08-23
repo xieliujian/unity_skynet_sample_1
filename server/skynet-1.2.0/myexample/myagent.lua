@@ -10,7 +10,7 @@ skynet.register_protocol {
     id = skynet.PTYPE_CLIENT,
 
     --需要将网路数据转换成lua字符串，不需要打包，所以不用注册pack函数
-    unpack = netpack.tostring,
+    unpack = skynet.tostring,
 }
 
 local function task(msg)
