@@ -23,7 +23,7 @@
 using System;
 
 
-namespace gtmEngine.Net
+namespace gtmEngine
 {
     public class Converter
     {

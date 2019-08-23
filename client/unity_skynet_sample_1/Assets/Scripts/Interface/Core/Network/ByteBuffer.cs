@@ -74,6 +74,11 @@ namespace gtmInterface
             m_Writer.Write(v);
         }
 
+        internal void WriteShort(object p)
+        {
+            throw new NotImplementedException();
+        }
+
         public void WriteFloat(float v)
         {
             byte[] temp = BitConverter.GetBytes(v);
