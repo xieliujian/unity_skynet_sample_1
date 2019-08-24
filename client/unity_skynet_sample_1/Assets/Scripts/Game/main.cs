@@ -11,7 +11,7 @@ namespace gtmGame
     {
         private GameMgr m_gameMgr = new GameMgr();
 
-        public string ipaddress = "192.168.0.102";
+        public string ipaddress = "192.168.0.108";
 
         private ulong reqmsgid = 10000;
 
