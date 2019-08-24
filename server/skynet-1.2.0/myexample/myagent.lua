@@ -14,7 +14,7 @@ skynet.register_protocol {
 }
 
 local function task(msg)
-    print("recv from fd", client_fd, msg)
+    --print("recv from fd", client_fd, msg)
 
     local reqmsgid = string.unpack("<L", msg);
     local msgoffset = 8;
